@@ -10,9 +10,12 @@
         <div class="container">
             <a class="navbar-brand" href="{{ url_for('index') }}">CENTRO DE CAPACITACIÓN</a>
             <div>
-                <a class="nav-link d-inline text-white px-2" href="{{ url_for('lista_estudiantes') }}">Estudiantes</a>
-                <a class="nav-link d-inline text-white px-2" href="{{ url_for('lista_cursos') }}">Cursos</a>
-                <a class="nav-link d-inline text-white px-2" href="{{ url_for('lista_inscripciones') }}">Inscripciones</a>
+                <a class="nav-link d-inline px-2 {% if request.endpoint == 'lista_estudiantes' or request.endpoint == 'nuevo_estudiante' or request.endpoint == 'editar_estudiante' %}text-warning fw-bold{% else %}text-white{% endif %}" 
+                   href="{{ url_for('lista_estudiantes') }}">Estudiantes</a>
+                <a class="nav-link d-inline px-2 {% if request.endpoint == 'lista_cursos' or request.endpoint == 'nuevo_curso' or request.endpoint == 'editar_curso' %}text-warning fw-bold{% else %}text-white{% endif %}" 
+                   href="{{ url_for('lista_cursos') }}">Cursos</a>
+                <a class="nav-link d-inline px-2 {% if request.endpoint == 'lista_inscripciones' or request.endpoint == 'nueva_inscripcion' or request.endpoint == 'editar_inscripcion' %}text-warning fw-bold{% else %}text-white{% endif %}" 
+                   href="{{ url_for('lista_inscripciones') }}">Inscripciones</a>
             </div>
         </div>
     </nav>

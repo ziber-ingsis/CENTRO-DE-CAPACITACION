@@ -1,23 +1,33 @@
 {% extends "base.html" %}
 {% block contenido %}
-<h1>Registrar Estudiante</h1>
+
+<h1>{% if estudiante %}Editar Estudiante{% else %}Registrar Estudiante{% endif %}</h1>
+
 <form method="post" class="card p-4">
     <div class="mb-3">
         <label class="form-label">Nombre</label>
-        <input type="text" name="nombre" class="form-control" required>
+        <input type="text" name="nombre" class="form-control" required
+               value="{% if estudiante %}{{ estudiante.nombre }}{% endif %}">
     </div>
     <div class="mb-3">
         <label class="form-label">Apellido</label>
-        <input type="text" name="apellido" class="form-control" required>
+        <input type="text" name="apellido" class="form-control" required
+               value="{% if estudiante %}{{ estudiante.apellido }}{% endif %}">
     </div>
     <div class="mb-3">
         <label class="form-label">Correo</label>
-        <input type="email" name="correo" class="form-control">
+        <input type="email" name="correo" class="form-control"
+               value="{% if estudiante %}{{ estudiante.correo }}{% endif %}">
     </div>
     <div class="mb-3">
         <label class="form-label">Teléfono</label>
-        <input type="text" name="telefono" class="form-control">
+        <input type="text" name="telefono" class="form-control"
+               value="{% if estudiante %}{{ estudiante.telefono }}{% endif %}">
     </div>
-    <button type="submit" class="btn btn-primary">Guardar</button>
+    <button type="submit" class="btn btn-primary">
+        {% if estudiante %}Guardar Cambios{% else %}Guardar{% endif %}
+    </button>
+    <a href="{{ url_for('lista_estudiantes') }}" class="btn btn-secondary mt-2">Cancelar</a>
 </form>
+
 {% endblock %}

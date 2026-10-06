@@ -1,19 +1,28 @@
 {% extends "base.html" %}
 {% block contenido %}
-<h1>Registrar Curso</h1>
+
+<h1>{% if curso %}Editar Curso{% else %}Registrar Curso{% endif %}</h1>
+
 <form method="post" class="card p-4">
     <div class="mb-3">
         <label class="form-label">Nombre del Curso</label>
-        <input type="text" name="nombre_curso" class="form-control" required>
+        <input type="text" name="nombre_curso" class="form-control" required
+               value="{% if curso %}{{ curso.nombre_curso }}{% endif %}">
     </div>
     <div class="mb-3">
         <label class="form-label">Duración en Horas</label>
-        <input type="number" name="duracion_horas" class="form-control" required>
+        <input type="number" name="duracion_horas" class="form-control" required
+               value="{% if curso %}{{ curso.duracion_horas }}{% endif %}">
     </div>
     <div class="mb-3">
         <label class="form-label">Precio (Bs)</label>
-        <input type="number" step="0.01" name="precio" class="form-control" required>
+        <input type="number" step="0.01" name="precio" class="form-control" required
+               value="{% if curso %}{{ curso.precio }}{% endif %}">
     </div>
-    <button type="submit" class="btn btn-primary">Guardar</button>
+    <button type="submit" class="btn btn-primary">
+        {% if curso %}Guardar Cambios{% else %}Guardar{% endif %}
+    </button>
+    <a href="{{ url_for('lista_cursos') }}" class="btn btn-secondary mt-2">Cancelar</a>
 </form>
+
 {% endblock %}

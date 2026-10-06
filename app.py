@@ -87,6 +87,35 @@ def eliminar_estudiante(id):
     conn.close()
     return redirect(url_for('lista_estudiantes'))
 
+# --- EDITAR ESTUDIANTE ---
+@app.route('/estudiantes/editar/<int:id>', methods=['GET','POST'])
+def editar_estudiante(id):
+    conn = sqlite3.connect(RUTA_BD)
+    conn.row_factory = sqlite3.Row
+    c = conn.cursor()
+
+    if request.method == 'POST':
+        c.execute("""
+            UPDATE estudiantes
+            SET nombre = ?, apellido = ?, correo = ?, telefono = ?
+            WHERE id = ?
+        """, (
+            request.form['nombre'],
+            request.form['apellido'],
+            request.form['correo'],
+            request.form['telefono'],
+            id
+        ))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('lista_estudiantes'))
+
+    c.execute("SELECT * FROM estudiantes WHERE id = ?", (id,))
+    estudiante = c.fetchone()
+    conn.close()
+    return render_template('form_estudiante.html', estudiante=estudiante)
+
+
 # --- CURSOS ---
 @app.route('/cursos')
 def lista_cursos():
@@ -124,6 +153,33 @@ def eliminar_curso(id):
     conn.commit()
     conn.close()
     return redirect(url_for('lista_cursos'))
+
+# --- EDITAR CURSO ---
+@app.route('/cursos/editar/<int:id>', methods=['GET','POST'])
+def editar_curso(id):
+    conn = sqlite3.connect(RUTA_BD)
+    conn.row_factory = sqlite3.Row
+    c = conn.cursor()
+
+    if request.method == 'POST':
+        c.execute("""
+            UPDATE cursos
+            SET nombre_curso = ?, duracion_horas = ?, precio = ?
+            WHERE id = ?
+        """, (
+            request.form['nombre_curso'],
+            request.form['duracion_horas'],
+            request.form['precio'],
+            id
+        ))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('lista_cursos'))
+
+    c.execute("SELECT * FROM cursos WHERE id = ?", (id,))
+    curso = c.fetchone()
+    conn.close()
+    return render_template('form_curso.html', curso=curso)
 
 # --- INSCRIPCIONES ---
 @app.route('/inscripciones')
@@ -178,6 +234,41 @@ def eliminar_inscripcion(id):
     conn.commit()
     conn.close()
     return redirect(url_for('lista_inscripciones'))
+
+# --- EDITAR INSCRIPCIÓN ---
+@app.route('/inscripciones/editar/<int:id>', methods=['GET','POST'])
+def editar_inscripcion(id):
+    conn = sqlite3.connect(RUTA_BD)
+    conn.row_factory = sqlite3.Row
+    c = conn.cursor()
+
+    if request.method == 'POST':
+        c.execute("""
+            UPDATE inscripciones
+            SET fecha_inscripcion = ?, estudiante_id = ?, curso_id = ?
+            WHERE id = ?
+        """, (
+            request.form['fecha_inscripcion'],
+            request.form['estudiante_id'],
+            request.form['curso_id'],
+            id
+        ))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('lista_inscripciones'))
+
+    c.execute("SELECT * FROM inscripciones WHERE id = ?", (id,))
+    inscripcion = c.fetchone()
+    # Cargar listas para desplegables
+    c.execute("SELECT * FROM estudiantes")
+    estudiantes = c.fetchall()
+    c.execute("SELECT * FROM cursos")
+    cursos = c.fetchall()
+    conn.close()
+    return render_template('form_inscripcion.html', 
+                           inscripcion=inscripcion,
+                           estudiantes=estudiantes,
+                           cursos=cursos)
 
 # === EJECUCIÓN ===
 if __name__ == '__main__':

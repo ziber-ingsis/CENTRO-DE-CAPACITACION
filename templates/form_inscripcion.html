@@ -1,16 +1,21 @@
 {% extends "base.html" %}
 {% block contenido %}
-<h1>Nueva Inscripción</h1>
+
+<h1>{% if inscripcion %}Editar Inscripción{% else %}Nueva Inscripción{% endif %}</h1>
+
 <form method="post" class="card p-4">
     <div class="mb-3">
         <label class="form-label">Fecha de Inscripción</label>
-        <input type="date" name="fecha_inscripcion" class="form-control" required>
+        <input type="date" name="fecha_inscripcion" class="form-control" required
+               value="{% if inscripcion %}{{ inscripcion.fecha_inscripcion }}{% endif %}">
     </div>
     <div class="mb-3">
         <label class="form-label">Estudiante</label>
         <select name="estudiante_id" class="form-select" required>
             {% for e in estudiantes %}
-            <option value="{{ e.id }}">{{ e.nombre }} {{ e.apellido }}</option>
+            <option value="{{ e.id }}" {% if inscripcion and inscripcion.estudiante_id == e.id %}selected{% endif %}>
+                {{ e.nombre }} {{ e.apellido }}
+            </option>
             {% endfor %}
         </select>
     </div>
@@ -18,10 +23,16 @@
         <label class="form-label">Curso</label>
         <select name="curso_id" class="form-select" required>
             {% for c in cursos %}
-            <option value="{{ c.id }}">{{ c.nombre_curso }} — {{ c.duracion_horas }}h — Bs {{ c.precio }}</option>
+            <option value="{{ c.id }}" {% if inscripcion and inscripcion.curso_id == c.id %}selected{% endif %}>
+                {{ c.nombre_curso }}
+            </option>
             {% endfor %}
         </select>
     </div>
-    <button type="submit" class="btn btn-primary">Inscribir</button>
+    <button type="submit" class="btn btn-primary">
+        {% if inscripcion %}Guardar Cambios{% else %}Inscribir{% endif %}
+    </button>
+    <a href="{{ url_for('lista_inscripciones') }}" class="btn btn-secondary mt-2">Cancelar</a>
 </form>
+
 {% endblock %}
