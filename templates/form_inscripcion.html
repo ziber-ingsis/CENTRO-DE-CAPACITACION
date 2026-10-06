@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h1>Nueva Inscripción</h1>
+<form method="post" class="card p-4">
+    <div class="mb-3">
+        <label class="form-label">Fecha de Inscripción</label>
+        <input type="date" name="fecha_inscripcion" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Estudiante</label>
+        <select name="estudiante_id" class="form-select" required>
+            {% for e in estudiantes %}
+            <option value="{{ e.id }}">{{ e.nombre }} {{ e.apellido }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Curso</label>
+        <select name="curso_id" class="form-select" required>
+            {% for c in cursos %}
+            <option value="{{ c.id }}">{{ c.nombre_curso }} — {{ c.duracion_horas }}h — Bs {{ c.precio }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Inscribir</button>
+</form>
+{% endblock %}
